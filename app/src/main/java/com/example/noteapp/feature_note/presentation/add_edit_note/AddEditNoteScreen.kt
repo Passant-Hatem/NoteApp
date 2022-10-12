@@ -7,6 +7,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Save
@@ -17,17 +19,21 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.noteapp.R
+import com.example.noteapp.core.util.TestTags
 import com.example.noteapp.feature_note.domain.model.Note
 import com.example.noteapp.feature_note.presentation.add_edit_note.components.TransparentHintTextField
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-
-//TODO add keyboard actions
 
 @Composable
 fun AddEditNoteScreen(
@@ -70,7 +76,7 @@ fun AddEditNoteScreen(
                 },
                 backgroundColor = MaterialTheme.colors.primary
             ) {
-                Icon(imageVector = Icons.Default.Save, contentDescription = "Save note")
+                Icon(imageVector = Icons.Default.Save, contentDescription = stringResource(R.string.save))
             }
         },
         scaffoldState = scaffoldState
@@ -117,6 +123,7 @@ fun AddEditNoteScreen(
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
+            val focusManager = LocalFocusManager.current
             TransparentHintTextField(
                 text = titleState.text,
                 hint = titleState.hint,
@@ -128,7 +135,12 @@ fun AddEditNoteScreen(
                 },
                 isHintVisible = titleState.isHintVisible,
                 singleLine = true,
-                textStyle = MaterialTheme.typography.h5
+                textStyle = MaterialTheme.typography.h5,
+                testTag = TestTags.TITLE_TEXT_FIELD,
+                keyboardOptions = KeyboardOptions( imeAction = ImeAction.Next),
+                keyboardActions = KeyboardActions( onNext = {
+                    focusManager.moveFocus(FocusDirection.Down)
+                })
             )
             Spacer(modifier = Modifier.height(16.dp))
             TransparentHintTextField(
@@ -142,7 +154,12 @@ fun AddEditNoteScreen(
                 },
                 isHintVisible = contentState.isHintVisible,
                 textStyle = MaterialTheme.typography.body1,
-                modifier = Modifier.fillMaxHeight()
+                modifier = Modifier.fillMaxHeight(),
+                testTag = TestTags.CONTENT_TEXT_FIELD,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = {
+                    viewModel.onEvent(AddEditNoteEvent.SaveNote)
+                })
             )
         }
     }
