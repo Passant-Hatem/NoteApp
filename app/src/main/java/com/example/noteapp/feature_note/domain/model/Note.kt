@@ -8,7 +8,6 @@ import com.example.noteapp.ui.theme.*
 data class Note(
     val title: String,
     val content: String,
-    //TODO change type to timestamp
     val timestamp: Long,
     val color: Int,
     @PrimaryKey val id: Int? = null
