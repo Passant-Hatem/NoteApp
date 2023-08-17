@@ -1,7 +1,12 @@
 package com.example.noteapp.modules.notes.presentation.notes.cmponents
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -17,14 +22,12 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.clipPath
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
 import com.example.noteapp.R
-import com.example.noteapp.modules.core.util.TestTags
 import com.example.noteapp.modules.notes.domain.model.Note
 
 
@@ -38,7 +41,6 @@ fun NoteItem(
 ) {
     Box(
         modifier = modifier
-            .testTag(TestTags.NOTE_ITEM)
     ) {
         Canvas(modifier = Modifier.matchParentSize()) {
             val clipPath = Path().apply {
