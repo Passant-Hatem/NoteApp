@@ -40,7 +40,7 @@ class AddEditNoteViewModel @Inject constructor(
     private var currentNoteId: Int? = null
 
     init {
-        savedStateHandle.get<Int>("noteId")?.let { noteId ->
+        savedStateHandle.get<Int>("id")?.let { noteId ->
             if(noteId != -1) {
                 viewModelScope.launch {
                     noteUseCases.getNote(noteId)?.also { note ->

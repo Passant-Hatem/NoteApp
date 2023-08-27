@@ -26,19 +26,19 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.example.noteapp.R
 import com.example.noteapp.modules.notes.domain.model.Note
-import com.example.noteapp.modules.notes.presentation.add_edit_note.components.TransparentHintTextField
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.noteapp.modules.core.presentation.components.TransparentHintTextField
+
 
 @Composable
 fun AddEditNoteScreen(
-    navController: NavController,
-    noteColor: Int,
-    viewModel: AddEditNoteViewModel = hiltViewModel()
+    noteColor: Int = -1,
+    navigateBack: () -> Unit,
+    viewModel: AddEditNoteViewModel = viewModel()
 ) {
     val titleState = viewModel.noteTitle.value
     val contentState = viewModel.noteContent.value
@@ -61,7 +61,7 @@ fun AddEditNoteScreen(
                     )
                 }
                 is AddEditNoteViewModel.UiEvent.SaveNote -> {
-                    navController.navigateUp()
+                  navigateBack()
                 }
             }
         }
