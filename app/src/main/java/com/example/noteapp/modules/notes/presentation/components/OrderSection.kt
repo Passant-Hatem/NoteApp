@@ -1,4 +1,4 @@
-package com.example.noteapp.modules.notes.presentation.notes.cmponents
+package com.example.noteapp.modules.notes.presentation.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.noteapp.R
+import com.example.noteapp.modules.core.presentation.components.DefaultRadioButton
 import com.example.noteapp.modules.notes.domain.util.NoteOrder
 import com.example.noteapp.modules.notes.domain.util.OrderType
 

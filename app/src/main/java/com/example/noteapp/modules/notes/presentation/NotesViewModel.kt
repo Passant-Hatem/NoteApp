@@ -1,4 +1,4 @@
-package com.example.noteapp.modules.notes.presentation.notes
+package com.example.noteapp.modules.notes.presentation
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -44,13 +44,13 @@ class NotesViewModel @Inject constructor(
                     recentlyDeletedNote = event.note
                 }
             }
-            is NotesEvent.RestoreNote->{
+            is NotesEvent.RestoreNote ->{
                 viewModelScope.launch {
                     noteUseCases.addNote(recentlyDeletedNote ?: return@launch)
                     recentlyDeletedNote = null
                 }
             }
-            is NotesEvent.ToggleOrderSection->{
+            is NotesEvent.ToggleOrderSection ->{
                 _state.value = state.value.copy(
                     isOrderSectionVisible = !state.value.isOrderSectionVisible
                 )
