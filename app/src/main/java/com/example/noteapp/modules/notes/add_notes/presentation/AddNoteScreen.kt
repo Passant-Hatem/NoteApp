@@ -44,17 +44,17 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.noteapp.R
 import com.example.noteapp.modules.core.presentation.components.TransparentHintTextField
+import com.example.noteapp.modules.core.presentation.model.UiEvent
 import com.example.noteapp.modules.notes.domain.model.Note
-import com.example.noteapp.modules.notes.presentation.add_edit_note.AddEditNoteEvent
-import com.example.noteapp.modules.notes.presentation.add_edit_note.AddEditNoteViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import com.example.noteapp.modules.notes.add_notes.presentation.AddNoteEvent.*
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun AddNoteScreen(
     navigateBack: () -> Unit,
-    viewModel: AddEditNoteViewModel = viewModel()
+    viewModel: AddNoteViewModel = viewModel()
 ) {
     val titleState = viewModel.noteTitle.value
     val contentState = viewModel.noteContent.value
@@ -71,12 +71,12 @@ fun AddNoteScreen(
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
             when(event) {
-                is AddEditNoteViewModel.UiEvent.ShowSnackbar -> {
+                is UiEvent.ShowSnackBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = event.message
                     )
                 }
-                is AddEditNoteViewModel.UiEvent.SaveNote -> {
+                is UiEvent.SaveNote -> {
                     navigateBack()
                 }
             }
@@ -87,7 +87,7 @@ fun AddNoteScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    viewModel.onEvent(AddEditNoteEvent.SaveNote)
+                    viewModel.onEvent(SaveNote)
                 },
                 backgroundColor = MaterialTheme.colors.primary
             ) {
@@ -132,7 +132,7 @@ fun AddNoteScreen(
                                         )
                                     )
                                 }
-                                viewModel.onEvent(AddEditNoteEvent.ChangeColor(colorInt))
+                                viewModel.onEvent(ChangeColor(colorInt))
                             }
                     )
                 }
@@ -143,10 +143,10 @@ fun AddNoteScreen(
                 text = titleState.text,
                 hint = titleState.hint,
                 onValueChange = {
-                    viewModel.onEvent(AddEditNoteEvent.EnteredTitle(it))
+                    viewModel.onEvent(EnteredTitle(it))
                 },
                 onFocusChange = {
-                    viewModel.onEvent(AddEditNoteEvent.ChangeTitleFocus(it))
+                    viewModel.onEvent(ChangeTitleFocus(it))
                 },
                 isHintVisible = titleState.isHintVisible,
                 singleLine = true,
@@ -161,17 +161,17 @@ fun AddNoteScreen(
                 text = contentState.text,
                 hint = contentState.hint,
                 onValueChange = {
-                    viewModel.onEvent(AddEditNoteEvent.EnteredContent(it))
+                    viewModel.onEvent(EnteredContent(it))
                 },
                 onFocusChange = {
-                    viewModel.onEvent(AddEditNoteEvent.ChangeContentFocus(it))
+                    viewModel.onEvent(ChangeContentFocus(it))
                 },
                 isHintVisible = contentState.isHintVisible,
                 textStyle = MaterialTheme.typography.body1,
                 modifier = Modifier.fillMaxHeight(),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(onDone = {
-                    viewModel.onEvent(AddEditNoteEvent.SaveNote)
+                    viewModel.onEvent(SaveNote)
                 })
             )
         }
