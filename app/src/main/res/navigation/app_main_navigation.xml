@@ -6,13 +6,10 @@
 
     <fragment
         android:id="@+id/addNotesFragment"
-        android:name="com.example.noteapp.modules.notes.add_notes.presentation.AddNotesFragment"
-        android:label="AddNotesFragment" >
-    </fragment>
+        android:name="com.example.noteapp.modules.notes.add_notes.presentation.AddNotesFragment" />
     <fragment
         android:id="@+id/editNotesFragment"
-        android:name="com.example.noteapp.modules.notes.edit_notes.presentation.EditNotesFragment"
-        android:label="EditNotesFragment" >
+        android:name="com.example.noteapp.modules.notes.edit_notes.presentation.EditNotesFragment">
         <argument
             android:name="id"
             app:argType="integer" />
@@ -22,8 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/notesFragment"
-        android:name="com.example.noteapp.modules.notes.presentation.NotesFragment"
-        android:label="NotesFragment" >
+        android:name="com.example.noteapp.modules.notes.presentation.NotesFragment">
         <action
             android:id="@+id/action_notesFragment_to_addNotesFragment"
             app:destination="@id/addNotesFragment" />
