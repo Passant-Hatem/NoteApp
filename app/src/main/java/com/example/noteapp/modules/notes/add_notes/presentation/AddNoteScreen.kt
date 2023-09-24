@@ -1,17 +1,32 @@
-package com.example.noteapp.modules.notes.presentation.add_edit_note
+package com.example.noteapp.modules.notes.add_notes.presentation
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Save
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -26,19 +41,20 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.noteapp.R
+import com.example.noteapp.modules.core.presentation.components.TransparentHintTextField
+import com.example.noteapp.modules.core.presentation.model.UiEvent
 import com.example.noteapp.modules.notes.domain.model.Note
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.noteapp.modules.core.presentation.components.TransparentHintTextField
+import com.example.noteapp.modules.notes.add_notes.presentation.AddNoteEvent.*
 
-
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun AddEditNoteScreen(
-    noteColor: Int = -1,
+fun AddNoteScreen(
     navigateBack: () -> Unit,
-    viewModel: AddEditNoteViewModel = viewModel()
+    viewModel: AddNoteViewModel = viewModel()
 ) {
     val titleState = viewModel.noteTitle.value
     val contentState = viewModel.noteContent.value
@@ -47,7 +63,7 @@ fun AddEditNoteScreen(
 
     val noteBackgroundAnimate = remember {
         Animatable(
-            Color(if (noteColor != -1) noteColor else viewModel.noteColor.value)
+            Color(viewModel.noteColor.value)
         )
     }
     val scope = rememberCoroutineScope()
@@ -55,13 +71,13 @@ fun AddEditNoteScreen(
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
             when(event) {
-                is AddEditNoteViewModel.UiEvent.ShowSnackbar -> {
+                is UiEvent.ShowSnackBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = event.message
                     )
                 }
-                is AddEditNoteViewModel.UiEvent.SaveNote -> {
-                  navigateBack()
+                is UiEvent.SaveNote -> {
+                    navigateBack()
                 }
             }
         }
@@ -71,7 +87,7 @@ fun AddEditNoteScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    viewModel.onEvent(AddEditNoteEvent.SaveNote)
+                    viewModel.onEvent(SaveNote)
                 },
                 backgroundColor = MaterialTheme.colors.primary
             ) {
@@ -116,7 +132,7 @@ fun AddEditNoteScreen(
                                         )
                                     )
                                 }
-                                viewModel.onEvent(AddEditNoteEvent.ChangeColor(colorInt))
+                                viewModel.onEvent(ChangeColor(colorInt))
                             }
                     )
                 }
@@ -127,10 +143,10 @@ fun AddEditNoteScreen(
                 text = titleState.text,
                 hint = titleState.hint,
                 onValueChange = {
-                    viewModel.onEvent(AddEditNoteEvent.EnteredTitle(it))
+                    viewModel.onEvent(EnteredTitle(it))
                 },
                 onFocusChange = {
-                    viewModel.onEvent(AddEditNoteEvent.ChangeTitleFocus(it))
+                    viewModel.onEvent(ChangeTitleFocus(it))
                 },
                 isHintVisible = titleState.isHintVisible,
                 singleLine = true,
@@ -145,17 +161,17 @@ fun AddEditNoteScreen(
                 text = contentState.text,
                 hint = contentState.hint,
                 onValueChange = {
-                    viewModel.onEvent(AddEditNoteEvent.EnteredContent(it))
+                    viewModel.onEvent(EnteredContent(it))
                 },
                 onFocusChange = {
-                    viewModel.onEvent(AddEditNoteEvent.ChangeContentFocus(it))
+                    viewModel.onEvent(ChangeContentFocus(it))
                 },
                 isHintVisible = contentState.isHintVisible,
                 textStyle = MaterialTheme.typography.body1,
                 modifier = Modifier.fillMaxHeight(),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(onDone = {
-                    viewModel.onEvent(AddEditNoteEvent.SaveNote)
+                    viewModel.onEvent(SaveNote)
                 })
             )
         }
